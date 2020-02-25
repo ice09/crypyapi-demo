@@ -37,8 +37,7 @@ public class XdaiApplication implements CommandLineRunner {
 		// Use well known private key, not to be used in production or with transaction values greater than $1
 		String privateKey = "710404145a788a5f2b7b6678f894a8ba621bdf8f4c04b44a3f703159916d39df";
 		Credentials credentials = Credentials.create(privateKey);
-		System.out.println("\n*** SECURITY NOTE ***");
-		System.out.println("In case something goes wrong, use this private key to recover money. But better be fast, this private key is well known: " + privateKey);
+		System.out.println("\nSECURITY NOTICE: In case something goes wrong, use this private key to recover money.\nBut better be fast, this private key is well known: " + privateKey);
 		System.out.println("\nHowdy! I am serving the best Chuck Norris jokes ever, but it will cost you $0.0001 (though I don't check it, feel free to send less).");
 		String addressToCheck = credentials.getAddress();
 
@@ -47,8 +46,7 @@ public class XdaiApplication implements CommandLineRunner {
 		while (true) {
 			randomId = RandomStringUtils.randomAlphabetic(6);
 			System.out.println("\nFor the next joke, sign this identifier with your private key: \"" + randomId + "\" and add it as input to your transaction to address " + addressToCheck);
-			System.out.println("The format for the extradata (message) is \"" + randomId + "|" + "0x...\"");
-			System.out.println("Note: Without the identifier, I am unable to correlate your payment and all your transferred money will be lost!");
+			System.out.println("The format for the extradata (message) is \"" + randomId + "|" + "0x...\" Note: Without the signed identifier, I am unable to correlate your payment!");
 
 			nextOnePlease = new AtomicBoolean(false);
 			while (!nextOnePlease.get()) {
