@@ -45,7 +45,9 @@ public class XdaiApplication implements CommandLineRunner {
 
 		while (true) {
 			randomId = RandomStringUtils.randomAlphabetic(6);
-			System.out.println("\nFor the next joke, sign this identifier with your private key: \"" + randomId + "\" and add it as input to your transaction to address " + addressToCheck);
+			System.out.println("\nFor the next joke:");
+			System.out.println("* Sign this identifier with your private key: \"" + randomId + "\"");
+			System.out.println("* Send $0.0001 to address " + addressToCheck + " and add the signed identifier as metadata");
 			System.out.println("The format for the extradata (message) is \"" + randomId + "|" + "0x...\" Note: Without the signed identifier, I am unable to correlate your payment!");
 
 			nextOnePlease = new AtomicBoolean(false);
