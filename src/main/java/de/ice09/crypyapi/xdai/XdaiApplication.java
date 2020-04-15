@@ -1,7 +1,7 @@
 package de.ice09.crypyapi.xdai;
 
-import io.reactivex.Flowable;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.buf.HexUtils;
@@ -11,21 +11,27 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @SpringBootApplication
-@Log
+@Slf4j
 public class XdaiApplication implements CommandLineRunner {
 
 	private AtomicBoolean nextOnePlease;
 	private String randomId;
+	private BigInteger lastBlock = BigInteger.ZERO;
 
 	public static void main(String[] args) {
 		SpringApplication.run(XdaiApplication.class, args);
@@ -33,15 +39,13 @@ public class XdaiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Web3j httpWeb3 = Web3j.build(new HttpService("https://dai.poa.network"));
+		Web3j httpWeb3 = Web3j.build(new HttpService("https://dai.poa.network", createOkHttpClient()));
 		// Use well known private key, not to be used in production or with transaction values greater than $1
 		String privateKey = "710404145a788a5f2b7b6678f894a8ba621bdf8f4c04b44a3f703159916d39df";
 		Credentials credentials = Credentials.create(privateKey);
-		System.out.println("\nSECURITY NOTICE: In case something goes wrong, use this private key to recover money.\nBut better be fast, this private key is well known: " + privateKey);
+		System.out.println("\nSECURITY NOTICE: In case something goes wrong, use this private key to recover money: " + privateKey);
 		System.out.println("\nHowdy! I am serving the best Chuck Norris jokes ever, but it will cost you $0.0001 (though I don't check it, feel free to send less).");
 		String addressToCheck = credentials.getAddress();
-
-		tellJokes(httpWeb3, addressToCheck);
 
 		while (true) {
 			randomId = RandomStringUtils.randomAlphabetic(6);
@@ -52,14 +56,23 @@ public class XdaiApplication implements CommandLineRunner {
 
 			nextOnePlease = new AtomicBoolean(false);
 			while (!nextOnePlease.get()) {
-				Thread.sleep(1000);
+				tellJokes(httpWeb3, addressToCheck);
+				Thread.sleep(100);
 			}
 		}
 
 	}
 
-	private void tellJokes(Web3j httpWeb3, String addressToCheck) {
-		httpWeb3.transactionFlowable().onErrorResumeNext(Flowable.empty()).subscribe(tx -> {
+	private void tellJokes(Web3j httpWeb3, String addressToCheck) throws IOException {
+		EthBlock result = httpWeb3.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).send();
+		EthBlock.Block block = result.getBlock();
+		if (lastBlock.equals(block.getNumber())) {
+			log.debug("No new block, resuming.");
+			return;
+		}
+		lastBlock = block.getNumber();
+		block.getTransactions().stream().forEach(txob -> {
+			Transaction tx = ((EthBlock.TransactionObject) txob.get()).get();
 			String input = tx.getInput();
 			String value = (tx.getValue() != null) ? tx.getValue().toString() : BigDecimal.ZERO.toString();
 			String from = tx.getFrom();
@@ -99,5 +112,18 @@ public class XdaiApplication implements CommandLineRunner {
 			}
 		}
 		return null;
+	}
+
+	private OkHttpClient createOkHttpClient() {
+		OkHttpClient.Builder builder = new OkHttpClient.Builder();
+		configureTimeouts(builder);
+		return builder.build();
+	}
+
+	private void configureTimeouts(OkHttpClient.Builder builder) {
+		Long tos = 8000L;
+		builder.connectTimeout(tos, TimeUnit.SECONDS);
+		builder.readTimeout(tos, TimeUnit.SECONDS);  // Sets the socket timeout too
+		builder.writeTimeout(tos, TimeUnit.SECONDS);
 	}
 }
