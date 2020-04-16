@@ -3,7 +3,7 @@ name: Create Release with Current Artifact
 on:
   release:
     types:
-      - created
+      - [created, edited]
 
 jobs:
   publish:
