@@ -1,8 +1,8 @@
 # Chuck Norris Joke Machine
 
-This repository contains two possible implementations of the Joke Machine mentioned in blog post:
-
-The easier version for simple testing is the proxy version.
+This repository contains two possible implementations of the Joke Machine mentioned in <a href="http://blockchainers.org/index.php/2020/04/18/pay-robots-with-crypto-dollars-xdais-for-apis">this blog post</a>.
+                                                                                                  
+The easier version for simple testing is the proxy version below.
 
 ## Chuck Norris Joke Machine (Manual Version)
 
