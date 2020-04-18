@@ -58,7 +58,7 @@ That's it, you just paid a machine for a cheap joke, congratulations!
 
 * In the other terminal, start Chuck Norris joke proxy, add transaction identifier as command line argument.
 
-`java -jar crypyapi-0.0.8.jar`
+`java -jar crypyapi-0.0.8.jar $TRX_ID`
 
 * Note down the proxy address.
 
