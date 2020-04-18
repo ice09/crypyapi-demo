@@ -5,9 +5,11 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.util.encoders.Hex;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -35,6 +37,9 @@ public class XdaiApplication implements CommandLineRunner {
 	private AtomicBoolean nextOnePlease;
 	private String randomId;
 	private BigInteger lastBlock = BigInteger.ZERO;
+
+	@Autowired
+	private ConfigurableApplicationContext context;
 
 	public static void main(String[] args) {
 		SpringApplication.run(XdaiApplication.class, args);
@@ -79,7 +84,7 @@ public class XdaiApplication implements CommandLineRunner {
 	private void createProxy(Web3j httpWeb3, Credentials proxyCreds, String toAddress, String trxId) throws ExecutionException, InterruptedException, IOException {
 		String addressToCheck = proxyCreds.getAddress();
 		System.out.println("\nSECURITY NOTICE: In case something goes wrong, use this private key to recover money: " + Numeric.toHexStringNoPrefix(proxyCreds.getEcKeyPair().getPrivateKey()));
-		System.out.println("\nI am the proxy. If you send me some money (~$0.01) to " + addressToCheck + ", I will pass $0.000000000000000001 (1 wei) to " + toAddress);
+		System.out.println("\nI am the proxy. If you send me some money (~$0.01) to " + addressToCheck + " I will pass $0.000000000000000001 (1 wei) to " + toAddress);
 
 		waitForMoneyTransfer(httpWeb3, addressToCheck);
 
@@ -102,7 +107,8 @@ public class XdaiApplication implements CommandLineRunner {
 		EthSendTransaction res = httpWeb3.ethSendRawTransaction(hexValue).send();
 		log.info("Sent Transaction: " + res.getTransactionHash());
 		System.out.println("\nThanks, enjoy the best Chuck Norris joke ever!");
-		System.exit(0);
+		Thread.sleep(1000);
+		System.exit(SpringApplication.exit(context));
 	}
 
 	private void waitForMoneyTransfer(Web3j httpWeb3, String proxyAddress) throws IOException, InterruptedException {
