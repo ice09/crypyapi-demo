@@ -84,7 +84,7 @@ public class XdaiApplication implements CommandLineRunner {
 	private void createProxy(Web3j httpWeb3, Credentials proxyCreds, String toAddress, String trxId) throws ExecutionException, InterruptedException, IOException {
 		String addressToCheck = proxyCreds.getAddress();
 		System.out.println("\nSECURITY NOTICE: In case something goes wrong, use this private key to recover money: " + Numeric.toHexStringNoPrefix(proxyCreds.getEcKeyPair().getPrivateKey()));
-		System.out.println("\nI am the proxy. If you send me some money (~$0.01) to " + addressToCheck + " I will pass $0.000000000000000001 (1 wei) to " + toAddress);
+		System.out.println("\nI am the proxy. If you send me some money ($0.02) to " + addressToCheck + " I will pass $0.000000000000000001 (1 wei) to " + toAddress);
 
 		waitForMoneyTransfer(httpWeb3, addressToCheck);
 

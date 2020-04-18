@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>de.ice09.payments</groupId>
 	<artifactId>crypyapi</artifactId>
-	<version>0.0.7</version>
+	<version>0.0.8</version>
 	<name>crypyapi</name>
 	<description>Payable API "crypyAPI" (/kraɪ pai ˌeɪ pɪː ˈaɪ/) with xDai</description>
 
