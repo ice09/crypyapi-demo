@@ -8,7 +8,7 @@ The easier version for simple testing is the proxy version.
 
 * Installed MetaMask (http://metamask.io), configured for xDai network (ID 100) with at least 0.01 XDAI balance
 
-## Start Chuck Norris Joking Machine
+### Start Chuck Norris Joking Machine
 
 * Download latest version of demo.
 
