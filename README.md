@@ -6,6 +6,8 @@ The easier version for simple testing is the proxy version below.
 
 ## Chuck Norris Joke Machine (Manual Version)
 
+### Prerequisites
+
 * Installed MetaMask (http://metamask.io), configured for xDai network (ID 100) with at least 0.01 XDAI balance
 
 ### Start Chuck Norris Joking Machine
@@ -37,6 +39,8 @@ The easier version for simple testing is the proxy version below.
 That's it, you just paid a machine for a cheap joke, congratulations!
 
 ## Chuck Norris Joke Machine Proxy Version
+
+### Prerequisites 
 
 * Installed MetaMask (http://metamask.io), configured for xDai network (ID 100) with at least 0.01 XDAI balance
 
