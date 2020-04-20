@@ -1,5 +1,7 @@
 # Chuck Norris Joke Machine
 
+![Build on Master Change with Artifacts](https://github.com/ice09/crypyapi-demo/workflows/Build%20on%20Master%20Change%20with%20Artifacts/badge.svg?branch=master)
+
 This repository contains two possible implementations of the Joke Machine mentioned in <a href="http://blockchainers.org/index.php/2020/04/18/pay-robots-with-crypto-dollars-xdais-for-apis">this blog post</a>.
                                                                                                   
 The easier version for simple testing is the proxy version below.
